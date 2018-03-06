@@ -6,6 +6,7 @@ defmodule AppWeb.UserController do
   alias AppWeb.Services.Authenticator
 
   action_fallback AppWeb.FallbackController
+  plug (AppWeb.Services.Plugs.UserPlug when action in [:show, :update, :delete, :index])
 
   def index(conn, _params) do
     users = Accounts.list_users()

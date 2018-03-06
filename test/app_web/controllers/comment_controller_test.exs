@@ -4,9 +4,9 @@ defmodule AppWeb.CommentControllerTest do
   alias App.Thread
   alias App.Thread.Comment
 
-  @create_attrs %{content: "some content"}
-  @update_attrs %{content: "some updated content"}
-  @invalid_attrs %{content: nil}
+  @create_attrs %{}
+  @update_attrs %{}
+  @invalid_attrs %{}
 
   def fixture(:comment) do
     {:ok, comment} = Thread.create_comment(@create_attrs)
@@ -31,8 +31,7 @@ defmodule AppWeb.CommentControllerTest do
 
       conn = get conn, comment_path(conn, :show, id)
       assert json_response(conn, 200)["data"] == %{
-        "id" => id,
-        "content" => "some content"}
+        "id" => id}
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -50,8 +49,7 @@ defmodule AppWeb.CommentControllerTest do
 
       conn = get conn, comment_path(conn, :show, id)
       assert json_response(conn, 200)["data"] == %{
-        "id" => id,
-        "content" => "some updated content"}
+        "id" => id}
     end
 
     test "renders errors when data is invalid", %{conn: conn, comment: comment} do

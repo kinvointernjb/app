@@ -7,7 +7,8 @@ defmodule App.Thread do
   alias App.Repo
 
   alias App.Thread.Post
-
+  alias App.Accounts.User
+  alias App.Thread.Comment
   @doc """
   Returns the list of posts.
 
@@ -17,8 +18,19 @@ defmodule App.Thread do
       [%Post{}, ...]
 
   """
-  def list_posts do
-    Repo.all(Post)
+  def list_posts(user) do
+    Post
+    |> where([p], p.user_id == ^user.id)
+    |> Repo.all()
+    |> Repo.preload([:user, [comments: :user]])
+  end
+
+  def list_all_posts() do
+
+    Post
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
+    |> Repo.preload([:user, [comments: :user]])
   end
 
   @doc """
@@ -49,8 +61,8 @@ defmodule App.Thread do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_post(attrs \\ %{}) do
-    %Post{}
+  def create_post(attrs \\ %{}, user) do
+    %Post{user_id: user.id}
     |> Post.changeset(attrs)
     |> Repo.insert()
   end
@@ -102,7 +114,6 @@ defmodule App.Thread do
     Post.changeset(post, %{})
   end
 
-  alias App.Thread.Comment
 
   @doc """
   Returns the list of comments.
@@ -114,7 +125,9 @@ defmodule App.Thread do
 
   """
   def list_comments do
-    Repo.all(Comment)
+    Comment
+    |> Repo.all()
+    |> Repo.preload(:user)
   end
 
   @doc """
@@ -145,8 +158,9 @@ defmodule App.Thread do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_comment(attrs \\ %{}) do
-    %Comment{}
+  def create_comment(attrs \\ %{}, user, post) do
+    %Comment{user_id: user.id, post_id: post |> String.to_integer()
+}
     |> Comment.changeset(attrs)
     |> Repo.insert()
   end

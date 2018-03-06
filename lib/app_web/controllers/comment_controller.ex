@@ -6,13 +6,15 @@ defmodule AppWeb.CommentController do
 
   action_fallback AppWeb.FallbackController
 
+  plug (AppWeb.Services.Plugs.UserPlug when action in [:show, :create, :update, :delete, :index])
+
   def index(conn, _params) do
     comments = Thread.list_comments()
-    render(conn, "index.json", comments: comments)
+    render(conn, "index_with_comment.json", comments: comments)
   end
 
   def create(conn, %{"comment" => comment_params}) do
-    with {:ok, %Comment{} = comment} <- Thread.create_comment(comment_params) do
+    with {:ok, %Comment{} = comment} <- Thread.create_comment(comment_params, conn.assigns.user, conn.path_params["post_id"]) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", comment_path(conn, :show, comment))

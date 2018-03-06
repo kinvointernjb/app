@@ -6,13 +6,21 @@ defmodule AppWeb.PostController do
 
   action_fallback AppWeb.FallbackController
 
+  plug (AppWeb.Services.Plugs.UserPlug when action in [:show, :create, :home, :update, :delete, :index])
+
   def index(conn, _params) do
-    posts = Thread.list_posts()
-    render(conn, "index.json", posts: posts)
+    posts = Thread.list_posts(conn.assigns.user)
+    render(conn, "index_with_details.json", posts: posts)
+  end
+
+  def home(conn, _params) do
+    posts = Thread.list_all_posts()
+    comments = Thread.list_comments()
+    render(conn, "index_with_details.json", posts: posts)
   end
 
   def create(conn, %{"post" => post_params}) do
-    with {:ok, %Post{} = post} <- Thread.create_post(post_params) do
+    with {:ok, %Post{} = post} <- Thread.create_post(post_params, conn.assigns.user) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", post_path(conn, :show, post))
