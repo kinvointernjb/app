@@ -20,13 +20,13 @@ defmodule App.Thread do
   """
   def list_posts(user) do
     Post
+    |> order_by(desc: :inserted_at)
     |> where([p], p.user_id == ^user.id)
     |> Repo.all()
     |> Repo.preload([:user, [comments: :user]])
   end
 
   def list_all_posts() do
-
     Post
     |> order_by(desc: :inserted_at)
     |> Repo.all()
@@ -126,6 +126,7 @@ defmodule App.Thread do
   """
   def list_comments do
     Comment
+    |> order_by(desc: :inserted_at)
     |> Repo.all()
     |> Repo.preload(:user)
   end

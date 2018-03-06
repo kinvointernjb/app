@@ -2,6 +2,7 @@ defmodule AppWeb.UserView do
   use AppWeb, :view
   alias AppWeb.UserView
   alias AppWeb.PostView
+  alias AppWeb.CommentView
 
   def render("index.json", %{users: users}) do
     %{data: render_many(users, UserView, "user.json")}
@@ -34,6 +35,19 @@ defmodule AppWeb.UserView do
     %{id: user.id,
       username: user.username,
       token: token
+    }
+  end
+
+  def render("show_profile.json", %{user: user}) do
+    %{data: render_one(user, UserView, "user_profile.json")}
+  end
+
+  def render("user_profile.json", %{user: user}) do
+    %{id: user.id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      username: user.username,
+      posts: render_many(user.posts, PostView, "post_for_user.json")
     }
   end
 end

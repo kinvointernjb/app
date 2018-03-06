@@ -19,6 +19,14 @@ defmodule AppWeb.PostView do
     }
   end
 
+  def render("post_for_user.json", %{post: post}) do
+    %{id: post.id,
+      title: post.title,
+      content: post.content,
+      comments: render_many(post.comments, CommentView, "comment_without_user.json")
+    }
+  end
+
   def render("show_with_details.json", %{post: post}) do
     %{data: render_one(post, PostView, "post.json")}
   end

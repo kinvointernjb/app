@@ -4,6 +4,7 @@ defmodule App.Accounts.User do
   alias App.Accounts.User
   import Comeonin.Bcrypt
   alias App.Thread.Post
+  alias App.Thread.Comment
 
   schema "users" do
     field :email, :string
@@ -13,6 +14,7 @@ defmodule App.Accounts.User do
     field :username, :string
     field :password, :string, virtual: true
     has_many :posts, Post
+    has_many :comments, Comment
     timestamps()
   end
 

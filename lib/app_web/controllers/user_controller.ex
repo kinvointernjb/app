@@ -6,7 +6,7 @@ defmodule AppWeb.UserController do
   alias AppWeb.Services.Authenticator
 
   action_fallback AppWeb.FallbackController
-  plug (AppWeb.Services.Plugs.UserPlug when action in [:show, :update, :delete, :index])
+  plug (AppWeb.Services.Plugs.UserPlug when action in [:show, :profile, :update, :delete, :index])
 
   def index(conn, _params) do
     users = Accounts.list_users()
@@ -25,6 +25,12 @@ defmodule AppWeb.UserController do
   def show(conn, %{"id" => username}) do
     user = Accounts.get_user_by_username(username)
     render(conn, "show.json", user: user)
+  end
+
+  def profile(conn, %{"username" => username}) do
+    user = Accounts.get_user_by_username(username)
+    render(conn, "show_profile.json", user: user)
+
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do

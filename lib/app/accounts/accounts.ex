@@ -35,7 +35,7 @@ defmodule App.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user_by_username(username), do: Repo.get_by(User, username: username)
+  def get_user_by_username(username), do: Repo.get_by(User, username: username) |> Repo.preload([:posts, [posts: :comments, comments: :user]])
 
   @doc """
   Gets a single user.

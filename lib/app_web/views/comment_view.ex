@@ -27,4 +27,10 @@ defmodule AppWeb.CommentView do
       user: render_one(comment.user, UserView, "home_users.json")
   }
   end
+
+  def render("comment_without_user.json", %{comment: comment}) do
+    %{id: comment.id,
+      content: comment.content
+  }
+  end
 end
