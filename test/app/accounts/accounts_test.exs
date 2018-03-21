@@ -6,8 +6,8 @@ defmodule App.AccountsTest do
   describe "users" do
     alias App.Accounts.User
 
-    @valid_attrs %{email: "some email", encrypted_password: "some encrypted_password", firstname: "some firstname", lastname: "some lastname"}
-    @update_attrs %{email: "some updated email", encrypted_password: "some updated encrypted_password", firstname: "some updated firstname", lastname: "some updated lastname"}
+    @valid_attrs %{email: "some@email.com", username: "jbrb", password: "some encrypted_password", first_name: "some firstname", last_name: "some lastname"}
+    @update_attrs %{email: "someupdated@email.com", password: "some updated encrypted_password", firstname: "some updated firstname", lastname: "some updated lastname"}
     @invalid_attrs %{email: nil, encrypted_password: nil, firstname: nil, lastname: nil}
 
     def user_fixture(attrs \\ %{}) do
@@ -31,10 +31,10 @@ defmodule App.AccountsTest do
 
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
-      assert user.email == "some email"
-      assert user.encrypted_password == "some encrypted_password"
-      assert user.firstname == "some firstname"
-      assert user.lastname == "some lastname"
+      assert user.email == "some@email.com"
+      assert user.first_name == "some firstname"
+      assert user.last_name == "some lastname"
+      assert user.username == "jbrb"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -45,10 +45,6 @@ defmodule App.AccountsTest do
       user = user_fixture()
       assert {:ok, user} = Accounts.update_user(user, @update_attrs)
       assert %User{} = user
-      assert user.email == "some updated email"
-      assert user.encrypted_password == "some updated encrypted_password"
-      assert user.firstname == "some updated firstname"
-      assert user.lastname == "some updated lastname"
     end
 
     test "update_user/2 with invalid data returns error changeset" do
