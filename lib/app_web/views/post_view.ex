@@ -23,7 +23,7 @@ defmodule AppWeb.PostView do
     %{id: post.id,
       title: post.title,
       content: post.content,
-      comments: render_many(post.comments, CommentView, "comment_without_user.json")
+      comments: render_many(post.comments, CommentView, "comment_with_user.json")
     }
   end
 
