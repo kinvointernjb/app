@@ -3,17 +3,13 @@ defmodule AppWeb.PostController do
 
   alias App.Thread
   alias App.Thread.Post
+  alias AppWeb.Utils.ErrorUtils
 
   action_fallback AppWeb.FallbackController
 
   plug (AppWeb.Services.Plugs.UserPlug when action in [:show, :create, :home, :update, :delete, :index])
 
   def index(conn, _params) do
-    posts = Thread.list_posts(conn.assigns.user)
-    render(conn, "index_with_details.json", posts: posts)
-  end
-
-  def home(conn, _params) do
     posts = Thread.list_all_posts()
     comments = Thread.list_comments()
     render(conn, "index_with_details.json", posts: posts)
@@ -43,8 +39,8 @@ defmodule AppWeb.PostController do
 
   def delete(conn, %{"id" => id}) do
     post = Thread.get_post!(id)
-    with {:ok, %Post{}} <- Thread.delete_post(post) do
-      send_resp(conn, :no_content, "")
-    end
+      with {:ok, %Post{}} <- Thread.delete_post(post) do
+        send_resp(conn, :no_content, "")
+      end
   end
 end

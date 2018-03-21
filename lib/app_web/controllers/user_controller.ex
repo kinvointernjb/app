@@ -24,13 +24,7 @@ defmodule AppWeb.UserController do
 
   def show(conn, %{"id" => username}) do
     user = Accounts.get_user_by_username(username)
-    render(conn, "show.json", user: user)
-  end
-
-  def profile(conn, %{"username" => username}) do
-    user = Accounts.get_user_by_username(username)
     render(conn, "show_profile.json", user: user)
-
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
