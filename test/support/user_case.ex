@@ -14,7 +14,6 @@ defmodule App.UserCase do
         username: "jbrb",
         password: "1234"
       }
-
     {:ok, user} = App.Accounts.create_user(user_params)
 
     {:ok, auth_map} =

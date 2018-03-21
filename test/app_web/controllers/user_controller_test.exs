@@ -109,11 +109,10 @@ defmodule AppWeb.UserControllerTest do
         username: "kinvojb",
         password: "kinvojb"
       }
-
       conn =
         conn
         |> post(user_path(conn, :authenticate, credentials))
-
+                
       assert response(conn, 200)
     end
   end
